@@ -14,12 +14,18 @@ $(function () {
     if ("color" in obj) {
       $("input[name='color']").val(obj.color);
     }
+
+    if ("exact_match" in obj) {
+      if (obj.exact_match == "on") {
+        $("input[name='exact_match']").prop("checked", true);
+      }
+    }
   });
   $("#reset").on("click", function() {
     reset();
   });
   $("#save").on("click", function() {
-    updateHighLightColor();
+    updateSettings();
   });
 });
 
@@ -33,9 +39,13 @@ function reset() {
   });
 }
 
-function updateHighLightColor() {
+function updateSettings() {
   let obj = {};
   obj.color = $("input[name='color']").val();
+  obj.exact_match = $("input[name='exact_match']:checked").val();
+  if (typeof obj.exact_match === "undefined") {
+    obj.exact_match = "off";
+  }
 
   chrome.storage.local.set(obj, function(){
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {

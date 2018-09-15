@@ -1,8 +1,11 @@
 ﻿//----------------------
 $(function () {
-    let host = location.host;
+    const google_hosts = [
+      "www.google.co.jp",
+      "www.google.com"
+    ];
 
-    if (host != "www.google.co.jp") {
+    if (google_hosts.indexOf(location.host) == -1) {
       highlight();
       return;
     }
@@ -35,13 +38,20 @@ chrome.runtime.onMessage.addListener(
 function highlight() {
   chrome.storage.local.get(function(obj) {
     if (("q" in obj) == false) { return }
-    //if (Object.keys(obj.q).length == 0) { return }
     $("body").removeHighlight();
 
     let color = "#ffff00";
     if (Object.keys(obj.color).length > 0) { color = obj.color }
 
-    let words = obj.q.split('+');
+    let words = [];
+    if (obj.exact_match == "on") {
+      words[0] = obj.q.replace(/\+/g, ' ').trim();
+    } else {
+      words = obj.q.split('+');
+      // Deduplication
+      words = words.filter((x, i, self) => self.indexOf(x) === i);
+    }
+    
     for (let i = 0; i < words.length; i++) {
       let word = decodeURIComponent(words[i]);
       $("body").highlight(word);
