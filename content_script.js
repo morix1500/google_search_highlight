@@ -41,6 +41,10 @@ function highlight() {
     if (("q" in obj) == false) { return }
     $("body").removeHighlight();
 
+    if ("disable" in obj) {
+      if (obj.disable == "on") { return }
+    }
+
     let color = "#ffff00";
     if (Object.keys(obj.color).length > 0) { color = obj.color }
 

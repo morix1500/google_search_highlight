@@ -20,6 +20,13 @@ $(function () {
         $("input[name='exact_match']").prop("checked", true);
       }
     }
+
+    if ("disable" in obj) {
+      if (obj.disable == "on") {
+        $("input[name='disable']").prop("checked", true);
+      }
+    }
+
   });
   $("#clear").on("click", function() {
     clear();
@@ -43,8 +50,12 @@ function updateSettings() {
   let obj = {};
   obj.color = $("input[name='color']").val();
   obj.exact_match = $("input[name='exact_match']:checked").val();
+  obj.disable = $("input[name='disable']:checked").val();
   if (typeof obj.exact_match === "undefined") {
     obj.exact_match = "off";
+  }
+  if (typeof obj.disable === "undefined") {
+    obj.disable = "off";
   }
 
   chrome.storage.local.set(obj, function(){
