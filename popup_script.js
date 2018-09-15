@@ -21,20 +21,20 @@ $(function () {
       }
     }
   });
-  $("#reset").on("click", function() {
-    reset();
+  $("#clear").on("click", function() {
+    clear();
   });
   $("#save").on("click", function() {
     updateSettings();
   });
 });
 
-function reset() {
+function clear() {
   chrome.storage.local.remove("q", null);
   $("#word").html("");
 
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-    chrome.tabs.sendMessage(tabs[0].id, {type: "reset"}, function(res) {
+    chrome.tabs.sendMessage(tabs[0].id, {type: "clear"}, function(res) {
     });
   });
 }
