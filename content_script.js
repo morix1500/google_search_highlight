@@ -16,7 +16,6 @@ $(function () {
       if (kv[0] == "q") {
         // remove double-quotation
         q = kv[1].replace(/%22/g, '').trim();
-        console.log(q);
         break;
       }
     }
