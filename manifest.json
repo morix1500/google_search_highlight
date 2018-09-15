@@ -1,0 +1,17 @@
+{
+  "name": "google-search-highlight",
+  "description": "This is an extension that highlights Google's search word.",
+  "version": "0.1",
+  "manifest_version": 2,
+  "content_scripts": [{
+    "matches": ["<all_urls>"],
+    "js": ["jquery-3.3.1.min.js", "jquery.highlight-5.js", "content_script.js"]
+  }],
+  "browser_action":{
+    "default_popup": "popup.html"
+  },
+  "permissions": [
+    "storage",
+    "tabs"
+  ]
+}
