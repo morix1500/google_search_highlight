@@ -14,7 +14,9 @@ $(function () {
     for (let i = 0; i < params.length; i++) {
       let kv = params[i].split("=");
       if (kv[0] == "q") {
-        q = kv[1];
+        // remove double-quotation
+        q = kv[1].replace(/%22/g, '').trim();
+        console.log(q);
         break;
       }
     }
