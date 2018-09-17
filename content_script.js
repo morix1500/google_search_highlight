@@ -1,40 +1,48 @@
 ﻿//----------------------
 $(function () {
-    const google_hosts = [
-      "www.google.co.jp",
-      "www.google.com"
-    ];
-
-    if (google_hosts.indexOf(location.host) == -1) {
-      highlight();
-      return;
+  if (!isGooglePage()) {
+    highlight();
+    return;
+  }
+  let params = location.search.substring(1).split('&');
+  let q = "";
+  for (let i = 0; i < params.length; i++) {
+    let kv = params[i].split("=");
+    if (kv[0] == "q") {
+      // remove double-quotation
+      q = kv[1].replace(/%22/g, '').trim();
+      break;
     }
-    let params = location.search.substring(1).split('&');
-    let q = "";
-    for (let i = 0; i < params.length; i++) {
-      let kv = params[i].split("=");
-      if (kv[0] == "q") {
-        // remove double-quotation
-        q = kv[1].replace(/%22/g, '').trim();
-        break;
-      }
-    }
-    if (q.length == 0) { return }
+  }
+  if (q.length == 0) { return }
 
-    let obj = {};
-    obj.q = q;
-    chrome.storage.local.set(obj, null);
+  let obj = {};
+  obj.q = q;
+  chrome.storage.local.set(obj, null);
 });
 
 chrome.runtime.onMessage.addListener(
   function(req, sender, res) {
     if (req.type == "update") {
-      highlight();
+      if (!isGooglePage()) {
+        highlight();
+      }
     } else {
       $("body").removeHighlight();
     }
   }
 );
+
+function isGooglePage() {
+  const google_hosts = [
+    "www.google.co.jp",
+    "www.google.com"
+  ];
+  if (google_hosts.indexOf(location.host) == -1) {
+    return false;
+  }
+  return true;
+}
 
 function highlight() {
   chrome.storage.local.get(function(obj) {
@@ -46,7 +54,7 @@ function highlight() {
     }
 
     let color = "#ffff00";
-    if (Object.keys(obj.color).length > 0) { color = obj.color }
+    if ("color" in obj) { color = obj.color }
 
     let words = [];
     if (obj.exact_match == "on") {
