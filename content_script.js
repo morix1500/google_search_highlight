@@ -69,6 +69,33 @@ function highlight() {
       let word = decodeURIComponent(words[i]);
       $("body").highlight(word);
     }
-    $(".highlight-ext").css("background-color", color);
+    setHighlightColor(color);
   });
+}
+
+function setHighlightColor(background_color) {
+  let font_color = "#ffffff";
+
+  if (background_color.length == 4) {
+    let code_arr = background_color.split('');
+    color_code = "#" + code_arr[1] + code_arr[1] + code_arr[2] + code_arr[2] + code_arr[3] + code_arr[3];
+  }
+  // set font color
+  if (background_color.length === 7) {
+    let r = parseInt(background_color.substring(1, 3), 16);
+    let g = parseInt(background_color.substring(3, 5), 16);
+    let b = parseInt(background_color.substring(5, 7), 16);
+
+    let intensity = 0.3 * r + 0.59 * g + 0.11 * b;
+    let k = 1;
+    r = 255 - Math.floor(intensity * k + r * (1 - k));
+    g = 255 - Math.floor(intensity * k + g * (1 - k));
+    b = 255 - Math.floor(intensity * k + b * (1 - k));
+    if ((r + g + b) < (255 * 1.5)) {
+      font_color = "#000000";
+    }
+  }
+
+  $(".highlight-ext").css("background-color", background_color);
+  $(".highlight-ext").css("color", font_color);
 }
