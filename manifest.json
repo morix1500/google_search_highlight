@@ -1,7 +1,7 @@
 {
   "name": "google-search-highlight",
   "description": "This is an extension that highlights Google's search word.",
-  "version": "0.1",
+  "version": "0.3",
   "manifest_version": 2,
   "content_scripts": [{
     "matches": ["<all_urls>"],
